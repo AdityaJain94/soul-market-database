@@ -55,7 +55,7 @@
   thead th .ar{color:var(--gold);margin-left:3px}
   .grouphead td{background:#F6F4EE;padding:9px 14px;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);font-weight:600;border-bottom:1px solid var(--border)}
   tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
-  tbody tr:hover{background:#FCFBF6}
+  tbody tr:hover{box-shadow:inset 0 0 0 9999px rgba(0,0,0,.03)}
   .brandcell{font-weight:500}
   .itemname{cursor:pointer;border-bottom:1px dashed var(--border-2)}
   .itemname:hover{color:var(--gold);border-color:var(--gold)}
@@ -381,7 +381,7 @@ function render(){
     const star=SEL.has(d.id)?'on':'';
     const flag=d.flag?`<span class="flagtag">${d.flag}</span>`:'';
     const best=(cheapest!==null&&priceMin(d)===cheapest)?'<span class="best">cheapest</span>':'';
-    h+=`<tr>
+    h+=`<tr style="background:${tint(kc[d.kit],0.09)}">
       <td><span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${kc[d.kit]};margin-right:7px"></span><span class="itemname" data-cmp="${d.type.replace(/"/g,'&quot;')}">${d.type}</span>${best}</td>
       <td><div class="brandcell">${d.brand}${flag}</div>${d.prod?`<div class="prodcell">${d.prod}</div>`:''}</td>
       <td><span class="tier ${d.tier}">${d.tier}</span></td>

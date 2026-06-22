@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUL — Market Database</title>
+<title>SOUL · Market Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -179,7 +179,7 @@
 
   <div class="legend">
     <span><span class="conf verified"></span>Price from a real listing</span>
-    <span><span class="conf est"></span>Estimated — confirm with a quote</span>
+    <span><span class="conf est"></span>Estimated · confirm with a quote</span>
     <span><span class="tier Budget" style="padding:1px 7px">Budget</span> / <span class="tier Mid" style="padding:1px 7px">Mid</span> / <span class="tier Premium" style="padding:1px 7px">Premium</span> = brand positioning, not tested</span>
   </div>
 
@@ -198,7 +198,7 @@
 
   <div class="builder">
     <div class="bh">
-      <h3>Kit builder — starred items</h3>
+      <h3>Kit builder · starred items</h3>
       <div class="actions">
         <button class="btn ghost" id="exportcsv">Export CSV</button>
         <button class="btn ghost" id="exportjson">Export JSON</button>
@@ -272,7 +272,7 @@ const SEED = [
   {kit:'FUEL',type:'Dry fruit / trail mix',brand:'Wholesale',prod:'Loose mix (per pack)',tier:'Budget',price:[40,120],where:'IndiaMART',conf:'est'},
   // REVIVE
   {kit:'REVIVE',type:'Anti-chafing cream',brand:'Skin Elements',prod:'20 sachets / 300ml',tier:'Mid',price:[300],where:'Amazon',conf:'verified'},
-  {kit:'REVIVE',type:'Anti-chafing cream',brand:'Skift',prod:'Dry Feel 50–100ml',tier:'Premium',price:[309,599],where:'Blinkit',conf:'verified'},
+  {kit:'REVIVE',type:'Anti-chafing cream',brand:'Skift',prod:'Dry Feel 50-100ml',tier:'Premium',price:[309,599],where:'Blinkit',conf:'verified'},
   {kit:'REVIVE',type:'Anti-chafing cream',brand:'Sirona',prod:'25g',tier:'Mid',price:[260],where:'Amazon',conf:'verified'},
   {kit:'REVIVE',type:'Anti-chafing cream',brand:'White-label',prod:'Tube',tier:'Budget',price:[45],where:'IndiaMART',conf:'est'},
   {kit:'REVIVE',type:'Cooling wipes',brand:'Generic',prod:'Body wipes pack',tier:'Budget',price:[40,150],where:'Amazon',conf:'est'},
@@ -326,9 +326,9 @@ DATA=SEED.map((d,i)=>({...d,id:i}));
 try{const s=localStorage.getItem('soul_db');if(s){const o=JSON.parse(s);if(o.data&&o.data.length){DATA=o.data}if(o.sel){SEL=new Set(o.sel)}}}catch(e){}
 
 const priceMin=p=>p.price[0];
-const priceTxt=p=>p.price.length>1?`${p.price[0].toLocaleString('en-IN')}–${p.price[1].toLocaleString('en-IN')}`:p.price[0].toLocaleString('en-IN');
+const priceTxt=p=>p.price.length>1?`${p.price[0].toLocaleString('en-IN')}-${p.price[1].toLocaleString('en-IN')}`:p.price[0].toLocaleString('en-IN');
 
-// ponytail: search links, not verified deep-links — data has no URLs. Upgrade per-SKU to a real `url` field if you confirm listings.
+// ponytail: search links, not verified deep-links · data has no URLs. Upgrade per-SKU to a real `url` field if you confirm listings.
 const SEARCH={
   Amazon:q=>`https://www.amazon.in/s?k=${q}`,
   Flipkart:q=>`https://www.flipkart.com/search?q=${q}`,
@@ -389,7 +389,7 @@ function render(){
   });
   tb.innerHTML=h;
   tb.querySelectorAll('.star').forEach(s=>s.onclick=()=>{const id=+s.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);save();render()});
-  tb.querySelectorAll('.del').forEach(s=>s.onclick=()=>{const id=+s.dataset.del;const d=DATA.find(x=>x.id===id);if(!confirm(`Remove "${d.brand} – ${d.type}" from the database?`))return;DATA=DATA.filter(x=>x.id!==id);SEL.delete(id);save();render()});
+  tb.querySelectorAll('.del').forEach(s=>s.onclick=()=>{const id=+s.dataset.del;const d=DATA.find(x=>x.id===id);if(!confirm(`Remove "${d.brand} - ${d.type}" from the database?`))return;DATA=DATA.filter(x=>x.id!==id);SEL.delete(id);save();render()});
   tb.querySelectorAll('.kitpick').forEach(s=>s.onchange=()=>{const d=DATA.find(x=>x.id===+s.dataset.kid);if(d){d.kit=s.value;save();render()}});
   tb.querySelectorAll('.itemname').forEach(s=>s.onclick=()=>{compareType=s.dataset.cmp;render();window.scrollTo({top:0,behavior:'smooth'})});
   updateCounts();renderBuilder();
@@ -403,7 +403,7 @@ function renderCmpBar(list){
   bar.style.display='flex';
   bar.innerHTML=`<span class="ct">${compareType}</span>
     <span class="cstat"><b>${list.length}</b> brand${list.length>1?'s':''}</span>
-    <span class="cstat">range <b>₹${lo.toLocaleString('en-IN')}–${hi.toLocaleString('en-IN')}</b></span>
+    <span class="cstat">range <b>₹${lo.toLocaleString('en-IN')}-${hi.toLocaleString('en-IN')}</b></span>
     <span class="cstat">cheapest <b>${best.brand} · ₹${priceMin(best).toLocaleString('en-IN')}</b></span>
     <span class="cx" id="cmpclear">× show all items</span>`;
   document.getElementById('cmpclear').onclick=()=>{compareType='';render()};
@@ -427,7 +427,7 @@ function renderBuilder(){
     const items=byKit[k.id];if(!items)return;
     const total=items.reduce((s,d)=>s+priceMin(d),0);
     h+=`<div class="ksel"><div class="kn"><span class="dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${k.color}"></span>${k.name}</div>
-      <div class="ki">${items.map(d=>`${d.type} — ${d.brand}`).join('<br>')}</div>
+      <div class="ki">${items.map(d=>`${d.type} · ${d.brand}`).join('<br>')}</div>
       <div class="kt"><span>${items.length} item${items.length>1?'s':''}</span><b>₹${total.toLocaleString('en-IN')}</b></div></div>`;
   });
   wrap.innerHTML=h;

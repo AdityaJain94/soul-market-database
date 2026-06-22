@@ -78,8 +78,12 @@
   a.wlink{color:var(--gold);text-decoration:none}
   a.wlink:hover{text-decoration:underline}
   .flagtag{font-size:10px;background:var(--flag-bg);color:var(--flag);padding:2px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
-  .star{cursor:pointer;width:30px;text-align:center;color:var(--muted-2);font-size:16px;line-height:1}
+  .rowact{white-space:nowrap;text-align:right}
+  .star{cursor:pointer;display:inline-block;text-align:center;color:var(--muted-2);font-size:16px;line-height:1}
   .star.on{color:var(--gold)}
+  .del{cursor:pointer;color:var(--muted-2);font-size:12px;margin-left:12px;opacity:0;transition:opacity .12s}
+  tbody tr:hover .del{opacity:.7}
+  .del:hover{color:var(--flag);opacity:1}
   .empty{padding:40px;text-align:center;color:var(--muted)}
 
   /* add row */
@@ -378,11 +382,12 @@ function render(){
       <td><span class="tier ${d.tier}">${d.tier}</span></td>
       <td class="price">${priceTxt(d)}<span class="conf ${d.conf}" title="${d.conf==='verified'?'from a listing':'estimate'}"></span></td>
       <td>${(u=>u?`<a class="where wlink" href="${u}" target="_blank" rel="noopener">${d.where} ↗</a>`:`<span class="where">${d.where}</span>`)(listingUrl(d))}</td>
-      <td class="star ${star}" data-id="${d.id}">${SEL.has(d.id)?'★':'☆'}</td>
+      <td class="rowact"><span class="star ${star}" data-id="${d.id}" title="Star for kit">${SEL.has(d.id)?'★':'☆'}</span><span class="del" data-del="${d.id}" title="Remove product">✕</span></td>
     </tr>`;
   });
   tb.innerHTML=h;
   tb.querySelectorAll('.star').forEach(s=>s.onclick=()=>{const id=+s.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);save();render()});
+  tb.querySelectorAll('.del').forEach(s=>s.onclick=()=>{const id=+s.dataset.del;const d=DATA.find(x=>x.id===id);if(!confirm(`Remove "${d.brand} – ${d.type}" from the database?`))return;DATA=DATA.filter(x=>x.id!==id);SEL.delete(id);save();render()});
   tb.querySelectorAll('.itemname').forEach(s=>s.onclick=()=>{compareType=s.dataset.cmp;render();window.scrollTo({top:0,behavior:'smooth'})});
   updateCounts();renderBuilder();
 }

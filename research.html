@@ -62,9 +62,29 @@
   .caveats{background:#F6F4EE;border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-top:18px;font-size:13.5px;color:var(--muted)}
   .caveats li{font-size:13.5px;color:#5a5670}
   footer{padding:34px 0 56px;text-align:center;color:var(--muted-2);font-size:12px}
+
+  html.locked,body.locked{overflow:hidden}
+  #gate{position:fixed;inset:0;z-index:99999;background:#fff;color:#000;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  #gate h1{font-size:30px;font-weight:600;margin:0 0 10px}
+  #gate p{font-size:15px;color:#222;margin:0}
+  #gate .g404{padding:64px 44px}
+  #gate hr{margin:22px 0;border:none;border-top:1px solid #ccc}
+  #gate .sig{font-size:13px;color:#555}
+  #gpw{position:fixed;left:16px;bottom:16px;width:150px;height:30px;border:1px solid #cfcfcf;border-radius:4px;padding:0 9px;font-size:13px;background:#fff;color:#000;opacity:.45;transition:opacity .15s}
+  #gpw:focus{outline:none;opacity:1;border-color:#999}
 </style>
 </head>
 <body>
+
+<div id="gate">
+  <div class="g404">
+    <h1>404 Not Found</h1>
+    <p>The requested URL was not found on this server.</p>
+    <hr>
+    <p class="sig">nginx</p>
+  </div>
+  <input id="gpw" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="">
+</div>
 
 <header>
   <div class="wrap">
@@ -256,7 +276,16 @@
 <footer>SOUL internal research · 2026 · estimates need supplier quotes and legal review before committing inventory</footer>
 
 <script>
-// ponytail: casual-copy deterrent only. DevTools, view-source and curl still expose everything; real protection is server-side auth (password-gate on Netlify).
+// ponytail: decoy gate, not security. Page content lives in this file's source; hashed password is recoverable from here. Real protection is server-side auth.
+(function(){
+  var root=document.documentElement,gate=document.getElementById('gate'),pw=document.getElementById('gpw');
+  function hsh(s){var x=0;for(var i=0;i<s.length;i++){x=(x*131+s.charCodeAt(i))>>>0}return x}
+  function open(){gate.style.display='none';root.classList.remove('locked');document.body.classList.remove('locked');try{sessionStorage.setItem('soul_r','1')}catch(e){}}
+  if(sessionStorage.getItem&&sessionStorage.getItem('soul_r')==='1'){open();return}
+  root.classList.add('locked');document.body.classList.add('locked');
+  pw.addEventListener('input',function(){if(hsh(pw.value)===228564175)open()});
+})();
+// casual-copy deterrent only. DevTools, view-source and curl still expose everything; real protection is server-side auth (password-gate on Netlify).
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase();if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&['s','u','p'].includes(k))return e.preventDefault();if(k==='f12'||((e.ctrlKey||e.metaKey)&&e.shiftKey&&['i','j','c'].includes(k)))return e.preventDefault();});
 </script>

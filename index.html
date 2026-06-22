@@ -75,6 +75,8 @@
   .conf.verified{background:var(--green)}
   .conf.est{background:var(--amber)}
   .where{font-size:12px;color:var(--muted)}
+  a.wlink{color:var(--gold);text-decoration:none}
+  a.wlink:hover{text-decoration:underline}
   .flagtag{font-size:10px;background:var(--flag-bg);color:var(--flag);padding:2px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
   .star{cursor:pointer;width:30px;text-align:center;color:var(--muted-2);font-size:16px;line-height:1}
   .star.on{color:var(--gold)}
@@ -320,6 +322,20 @@ try{const s=localStorage.getItem('soul_db');if(s){const o=JSON.parse(s);if(o.dat
 const priceMin=p=>p.price[0];
 const priceTxt=p=>p.price.length>1?`${p.price[0].toLocaleString('en-IN')}–${p.price[1].toLocaleString('en-IN')}`:p.price[0].toLocaleString('en-IN');
 
+// ponytail: search links, not verified deep-links — data has no URLs. Upgrade per-SKU to a real `url` field if you confirm listings.
+const SEARCH={
+  Amazon:q=>`https://www.amazon.in/s?k=${q}`,
+  Flipkart:q=>`https://www.flipkart.com/search?q=${q}`,
+  IndiaMART:q=>`https://dir.indiamart.com/search.mp?ss=${q}`
+};
+const NOLINK=new Set(['Local','Pharmacy','Import','Added']);
+function listingUrl(d){
+  if(d.url)return d.url; // honor a real listing URL if one's ever added
+  if(NOLINK.has(d.where))return null;
+  const q=encodeURIComponent(`${d.brand} ${d.prod||d.type}`);
+  return (SEARCH[d.where]||(x=>`https://www.google.com/search?q=${x}`))(q);
+}
+
 function buildChips(){
   const el=document.getElementById('kitchips');
   let h=`<div class="chip ${curKit===''?'on':''}" data-k="">All kits</div>`;
@@ -361,7 +377,7 @@ function render(){
       <td><div class="brandcell">${d.brand}${flag}</div>${d.prod?`<div class="prodcell">${d.prod}</div>`:''}</td>
       <td><span class="tier ${d.tier}">${d.tier}</span></td>
       <td class="price">${priceTxt(d)}<span class="conf ${d.conf}" title="${d.conf==='verified'?'from a listing':'estimate'}"></span></td>
-      <td class="where">${d.where}</td>
+      <td>${(u=>u?`<a class="where wlink" href="${u}" target="_blank" rel="noopener">${d.where} ↗</a>`:`<span class="where">${d.where}</span>`)(listingUrl(d))}</td>
       <td class="star ${star}" data-id="${d.id}">${SEL.has(d.id)?'★':'☆'}</td>
     </tr>`;
   });

@@ -175,7 +175,7 @@
           <th data-sort="brand">Brand / product</th>
           <th data-sort="tier">Quality</th>
           <th class="num" data-sort="price">Price ₹</th>
-          <th>Where</th>
+          <th data-sort="where">Where</th>
           <th data-sort="kit">Kit</th>
           <th></th>
         </tr></thead>
@@ -325,7 +325,16 @@ const SEED = [
   {kit:'CAMP',type:'MOLLE pouch',brand:'Generic',prod:'Import pouch',tier:'Budget',price:[300,500],where:'IndiaMART',conf:'est'}
 ];
 
-let DATA=[], SEL=new Set(), curKit='', sortKey='price', sortDir=1, compareType='';
+let DATA=[], SEL=new Set(), curKit='', sortKey='price', sortDir=1, compareType='', useHeaderSort=false;
+const kitName=id=>{const k=KITS.find(x=>x.id===id);return k?k.name:id};
+function headerCmp(a,b){
+  let r;
+  if(sortKey==='price')r=priceMin(a)-priceMin(b);
+  else if(sortKey==='tier'){const o={Budget:0,Mid:1,Premium:2};r=(o[a.tier]??9)-(o[b.tier]??9);}
+  else if(sortKey==='kit')r=kitName(a.kit).localeCompare(kitName(b.kit));
+  else r=String(a[sortKey]||'').localeCompare(String(b[sortKey]||''),undefined,{sensitivity:'base'});
+  return (r||priceMin(a)-priceMin(b))*sortDir;
+}
 
 function load(){
   try{const s=localStorage.getItem('soul_db');if(s){const o=JSON.parse(s);DATA=o.data||SEED.slice();SEL=new Set(o.sel||[]);return}}catch(e){}
@@ -376,17 +385,19 @@ function render(){
     if(q&&!(`${d.type} ${d.brand} ${d.prod||''}`.toLowerCase().includes(q)))return false;
     return true;
   });
-  if(compareType||sf==='price-asc')list.sort((a,b)=>priceMin(a)-priceMin(b));
+  if(!compareType&&useHeaderSort)list.sort(headerCmp);
+  else if(compareType||sf==='price-asc')list.sort((a,b)=>priceMin(a)-priceMin(b));
   else if(sf==='price-desc')list.sort((a,b)=>priceMin(b)-priceMin(a));
   else list.sort((a,b)=>(a.kit+a.type).localeCompare(b.kit+b.type)||priceMin(a)-priceMin(b));
 
+  updateSortArrows();
   renderCmpBar(list);
   const cheapest=compareType&&list.length?priceMin(list[0]):null;
   const tb=document.getElementById('rows');
   document.getElementById('empty').style.display=list.length?'none':'block';
   let h='',lastG='';
   list.forEach(d=>{
-    if(!compareType&&sf==='type'){const g=`${KITS.find(k=>k.id===d.kit).name} · ${d.type}`;if(g!==lastG){h+=`<tr class="grouphead"><td colspan="7">${g}</td></tr>`;lastG=g}}
+    if(!compareType&&!useHeaderSort&&sf==='type'){const g=`${KITS.find(k=>k.id===d.kit).name} · ${d.type}`;if(g!==lastG){h+=`<tr class="grouphead"><td colspan="7">${g}</td></tr>`;lastG=g}}
     const star=SEL.has(d.id)?'on':'';
     const flag=d.flag?`<span class="flagtag">${d.flag}</span>`:'';
     const best=(cheapest!==null&&priceMin(d)===cheapest)?'<span class="best">cheapest</span>':'';
@@ -466,7 +477,21 @@ document.getElementById('exportcsv').onclick=()=>{
   dl('soul-market-db.csv',rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n'),'text/csv')};
 function dl(name,content,type){const b=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
 
-['q','tierf','sortf'].forEach(i=>document.getElementById(i).addEventListener('input',()=>{compareType='';render()}));
+function updateSortArrows(){
+  document.querySelectorAll('thead th[data-sort]').forEach(th=>{
+    const k=th.dataset.sort;
+    if(th.dataset.label===undefined)th.dataset.label=th.textContent;
+    th.innerHTML=th.dataset.label+(useHeaderSort&&!compareType&&sortKey===k?` <span class="ar">${sortDir>0?'▲':'▼'}</span>`:'');
+  });
+}
+document.querySelectorAll('thead th[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+  const k=th.dataset.sort;
+  if(useHeaderSort&&sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1}
+  useHeaderSort=true;compareType='';render();
+}));
+document.getElementById('q').addEventListener('input',()=>{compareType='';render()});
+document.getElementById('tierf').addEventListener('input',()=>{compareType='';render()});
+document.getElementById('sortf').addEventListener('input',()=>{compareType='';useHeaderSort=false;render()});
 buildChips();buildKitSelect();render();
 </script>
 </body>

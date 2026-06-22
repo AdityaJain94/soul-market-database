@@ -78,6 +78,7 @@
   a.wlink{color:var(--gold);text-decoration:none}
   a.wlink:hover{text-decoration:underline}
   .flagtag{font-size:10px;background:var(--flag-bg);color:var(--flag);padding:2px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
+  .kitpick{font-size:11px;height:24px;padding:0 22px 0 8px;border:1px solid var(--border-2);border-radius:5px;background-color:var(--surface);color:var(--muted);margin-right:8px;vertical-align:middle;max-width:140px}
   .rowact{white-space:nowrap;text-align:right}
   .star{cursor:pointer;display:inline-block;text-align:center;color:var(--muted-2);font-size:16px;line-height:1}
   .star.on{color:var(--gold)}
@@ -202,6 +203,7 @@
         <button class="btn ghost" id="exportcsv">Export CSV</button>
         <button class="btn ghost" id="exportjson">Export JSON</button>
         <button class="btn ghost" id="clearsel">Clear stars</button>
+        <button class="btn ghost" id="resetdb">Reset to defaults</button>
       </div>
     </div>
     <p class="nosel" id="nosel">Star items in the table above to draft a kit. Totals use each item's price (lowest of a range).</p>
@@ -377,7 +379,7 @@ function render(){
     const flag=d.flag?`<span class="flagtag">${d.flag}</span>`:'';
     const best=(cheapest!==null&&priceMin(d)===cheapest)?'<span class="best">cheapest</span>':'';
     h+=`<tr>
-      <td><span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${kc[d.kit]};margin-right:7px"></span><span class="itemname" data-cmp="${d.type.replace(/"/g,'&quot;')}">${d.type}</span>${best}</td>
+      <td><span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${kc[d.kit]};margin-right:7px"></span><select class="kitpick" data-kid="${d.id}" title="Move to kit">${KITS.map(k=>`<option value="${k.id}"${k.id===d.kit?' selected':''}>${k.name}</option>`).join('')}</select><span class="itemname" data-cmp="${d.type.replace(/"/g,'&quot;')}">${d.type}</span>${best}</td>
       <td><div class="brandcell">${d.brand}${flag}</div>${d.prod?`<div class="prodcell">${d.prod}</div>`:''}</td>
       <td><span class="tier ${d.tier}">${d.tier}</span></td>
       <td class="price">${priceTxt(d)}<span class="conf ${d.conf}" title="${d.conf==='verified'?'from a listing':'estimate'}"></span></td>
@@ -388,6 +390,7 @@ function render(){
   tb.innerHTML=h;
   tb.querySelectorAll('.star').forEach(s=>s.onclick=()=>{const id=+s.dataset.id;SEL.has(id)?SEL.delete(id):SEL.add(id);save();render()});
   tb.querySelectorAll('.del').forEach(s=>s.onclick=()=>{const id=+s.dataset.del;const d=DATA.find(x=>x.id===id);if(!confirm(`Remove "${d.brand} – ${d.type}" from the database?`))return;DATA=DATA.filter(x=>x.id!==id);SEL.delete(id);save();render()});
+  tb.querySelectorAll('.kitpick').forEach(s=>s.onchange=()=>{const d=DATA.find(x=>x.id===+s.dataset.kid);if(d){d.kit=s.value;save();render()}});
   tb.querySelectorAll('.itemname').forEach(s=>s.onclick=()=>{compareType=s.dataset.cmp;render();window.scrollTo({top:0,behavior:'smooth'})});
   updateCounts();renderBuilder();
 }
@@ -441,6 +444,7 @@ document.getElementById('addbtn').onclick=()=>{
   save();render();
 };
 document.getElementById('clearsel').onclick=()=>{SEL.clear();save();render()};
+document.getElementById('resetdb').onclick=()=>{if(!confirm('Reset to the original 78 items? This deletes your added, edited and removed products and clears stars.'))return;DATA=SEED.map((d,i)=>({...d,id:i}));SEL.clear();compareType='';save();render()};
 document.getElementById('exportjson').onclick=()=>{
   dl('soul-market-db.json',JSON.stringify(DATA,null,2),'application/json')};
 document.getElementById('exportcsv').onclick=()=>{

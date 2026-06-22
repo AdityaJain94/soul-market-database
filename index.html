@@ -78,7 +78,8 @@
   a.wlink{color:var(--gold);text-decoration:none}
   a.wlink:hover{text-decoration:underline}
   .flagtag{font-size:10px;background:var(--flag-bg);color:var(--flag);padding:2px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
-  .kitpick{font-size:11px;height:24px;padding:0 22px 0 8px;border:1px solid var(--border-2);border-radius:5px;background-color:var(--surface);color:var(--muted);margin-right:8px;vertical-align:middle;max-width:140px}
+  .kitcell{padding:6px 10px}
+  .kitpick{font-size:11px;height:26px;padding:0 22px 0 8px;border:1px solid rgba(0,0,0,.12);border-radius:5px;background-color:rgba(255,255,255,.65);color:var(--ink);font-weight:500;vertical-align:middle;width:100%;max-width:150px;cursor:pointer}
   .rowact{white-space:nowrap;text-align:right}
   .star{cursor:pointer;display:inline-block;text-align:center;color:var(--muted-2);font-size:16px;line-height:1}
   .star.on{color:var(--gold)}
@@ -169,6 +170,7 @@
           <th data-sort="tier">Quality</th>
           <th class="num" data-sort="price">Price ₹</th>
           <th>Where</th>
+          <th data-sort="kit">Kit</th>
           <th></th>
         </tr></thead>
         <tbody id="rows"></tbody>
@@ -325,6 +327,7 @@ function save(){try{localStorage.setItem('soul_db',JSON.stringify({data:DATA,sel
 DATA=SEED.map((d,i)=>({...d,id:i}));
 try{const s=localStorage.getItem('soul_db');if(s){const o=JSON.parse(s);if(o.data&&o.data.length){DATA=o.data}if(o.sel){SEL=new Set(o.sel)}}}catch(e){}
 
+const tint=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 const priceMin=p=>p.price[0];
 const priceTxt=p=>p.price.length>1?`${p.price[0].toLocaleString('en-IN')}-${p.price[1].toLocaleString('en-IN')}`:p.price[0].toLocaleString('en-IN');
 
@@ -374,16 +377,17 @@ function render(){
   document.getElementById('empty').style.display=list.length?'none':'block';
   let h='',lastG='';
   list.forEach(d=>{
-    if(!compareType&&sf==='type'){const g=`${KITS.find(k=>k.id===d.kit).name} · ${d.type}`;if(g!==lastG){h+=`<tr class="grouphead"><td colspan="6">${g}</td></tr>`;lastG=g}}
+    if(!compareType&&sf==='type'){const g=`${KITS.find(k=>k.id===d.kit).name} · ${d.type}`;if(g!==lastG){h+=`<tr class="grouphead"><td colspan="7">${g}</td></tr>`;lastG=g}}
     const star=SEL.has(d.id)?'on':'';
     const flag=d.flag?`<span class="flagtag">${d.flag}</span>`:'';
     const best=(cheapest!==null&&priceMin(d)===cheapest)?'<span class="best">cheapest</span>':'';
     h+=`<tr>
-      <td><span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${kc[d.kit]};margin-right:7px"></span><select class="kitpick" data-kid="${d.id}" title="Move to kit">${KITS.map(k=>`<option value="${k.id}"${k.id===d.kit?' selected':''}>${k.name}</option>`).join('')}</select><span class="itemname" data-cmp="${d.type.replace(/"/g,'&quot;')}">${d.type}</span>${best}</td>
+      <td><span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${kc[d.kit]};margin-right:7px"></span><span class="itemname" data-cmp="${d.type.replace(/"/g,'&quot;')}">${d.type}</span>${best}</td>
       <td><div class="brandcell">${d.brand}${flag}</div>${d.prod?`<div class="prodcell">${d.prod}</div>`:''}</td>
       <td><span class="tier ${d.tier}">${d.tier}</span></td>
       <td class="price">${priceTxt(d)}<span class="conf ${d.conf}" title="${d.conf==='verified'?'from a listing':'estimate'}"></span></td>
       <td>${(u=>u?`<a class="where wlink" href="${u}" target="_blank" rel="noopener">${d.where} ↗</a>`:`<span class="where">${d.where}</span>`)(listingUrl(d))}</td>
+      <td class="kitcell" style="background:${tint(kc[d.kit],0.14)};border-left:3px solid ${kc[d.kit]}"><select class="kitpick" data-kid="${d.id}" title="Move to kit">${KITS.map(k=>`<option value="${k.id}"${k.id===d.kit?' selected':''}>${k.name}</option>`).join('')}</select></td>
       <td class="rowact"><span class="star ${star}" data-id="${d.id}" title="Star for kit">${SEL.has(d.id)?'★':'☆'}</span><span class="del" data-del="${d.id}" title="Remove product">✕</span></td>
     </tr>`;
   });

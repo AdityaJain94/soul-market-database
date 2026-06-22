@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
 <title>SOUL · Market Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +19,9 @@
     --flag:#C8472C;--flag-bg:#FBEAE5;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none}
+  input,select,textarea{-webkit-user-select:text;user-select:text}
+  @media print{body *{display:none!important}body::after{content:'SOUL · internal market database · printing disabled';display:block;padding:60px 20px;text-align:center;color:#211C33;font-size:16px}}
   .mono{font-family:'IBM Plex Mono',monospace}
   .wrap{max-width:1100px;margin:0 auto;padding:0 22px}
 
@@ -26,6 +29,9 @@
   .brand{display:flex;align-items:baseline;gap:12px}
   .brand .logo{font-weight:600;font-size:24px;letter-spacing:0.14em;color:var(--gold)}
   .brand .ttl{font-size:15px;color:var(--muted);font-weight:500}
+  .navlink{margin-left:auto;font-size:13px;color:var(--gold);text-decoration:none;font-weight:500}
+  .navlink:hover{text-decoration:underline}
+  .brand{width:100%}
   header .desc{font-size:14px;color:var(--muted);margin-top:8px;max-width:620px}
 
   .counts{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap}
@@ -126,7 +132,7 @@
 
 <header>
   <div class="wrap">
-    <div class="brand"><span class="logo">SOUL</span><span class="ttl">Market Database</span></div>
+    <div class="brand"><span class="logo">SOUL</span><span class="ttl">Market Database</span><a class="navlink" href="research.html">Research report →</a></div>
     <p class="desc">Every component we might use, the brands that sell it, their price and quality tier. Filter by kit or item, sort by price, add your own finds, then star items to build a kit.</p>
     <div class="counts">
       <div class="count"><div class="n" id="c-items">0</div><div class="l">market options</div></div>
@@ -216,6 +222,9 @@
 <footer>SOUL market database · prices gathered 2026 · estimates need supplier quotes before committing inventory</footer>
 
 <script>
+// ponytail: casual-copy deterrent only. DevTools, view-source and curl still expose everything; real protection is server-side auth (password-gate on Netlify).
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase();if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&['s','u','p'].includes(k))return e.preventDefault();if(k==='f12'||((e.ctrlKey||e.metaKey)&&e.shiftKey&&['i','j','c'].includes(k)))return e.preventDefault();});
 const KITS = [
   {id:'FIX',name:'SOUL FIX',color:'#D85A30'},
   {id:'SOS',name:'SOUL S.O.S',color:'#D85A30'},

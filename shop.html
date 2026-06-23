@@ -10,18 +10,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --canvas:#F4EFE4;      /* warm sand body */
-    --surface:#FCFAF4;     /* cards */
-    --ink:#19170F;         /* near-black warm ink + dark hero */
-    --ink-soft:#39342A;
-    --muted:#6E6757;       /* warm muted */
-    --line:#E4DBC8;        /* warm hairline */
-    --gold:#B97D1C;        /* SOUL gold accent */
-    --gold-deep:#9C6610;
-    --gold-soft:#F2E6CB;
-    --green:#2E6F4E;       /* refill / trust */
-    --clay:#BC4B2B;        /* sale / alert */
-    --fix:#C2562E; --revive:#2E8B63; --hydration:#2B7AB8; --bag:#7A5B36; --bundle:#B97D1C;
+    --canvas:#ECEDE4;      /* greenish bone body */
+    --surface:#F6F7F0;     /* cards */
+    --ink:#15211B;         /* near-black forest: text + dark bands */
+    --ink-soft:#33403A;
+    --muted:#5E6A60;       /* green-grey muted */
+    --line:#DADCCF;        /* greenish hairline */
+    --gold:#CE8A22;        /* amber accent (single accent) */
+    --gold-deep:#A96E12;
+    --gold-soft:#EFE2C6;
+    --green:#3C7A57;       /* refill / trust */
+    --clay:#B4502B;        /* error / destructive only */
+    --fix:#2C4A3E; --revive:#2C4A3E; --hydration:#2C4A3E; --bag:#2C4A3E; --bundle:#2C4A3E;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -36,11 +36,11 @@
   .clip{overflow-x:hidden}
 
   /* announcement */
-  .announce{background:var(--ink);color:#F4EFE4;text-align:center;font-size:12.5px;padding:9px 14px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
-  .announce b{color:#E9B254;font-weight:600}
+  .announce{background:var(--ink);color:#EAEDE2;text-align:center;font-size:12.5px;padding:9px 14px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+  .announce b{color:#E2A23C;font-weight:600}
 
   /* header */
-  header{position:sticky;top:0;z-index:30;background:rgba(244,239,228,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:30;background:rgba(234,237,226,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .hrow{display:flex;align-items:center;gap:26px;height:66px}
   .brand{display:flex;align-items:baseline;gap:8px;line-height:1}
   .brand .mark{font-family:'Archivo',sans-serif;font-weight:900;font-size:25px;letter-spacing:.16em;color:var(--ink)}
@@ -49,40 +49,41 @@
   .nav a{position:relative}
   .nav a:hover{color:var(--gold-deep)}
   .hactions{margin-left:auto;display:flex;align-items:center;gap:10px}
-  .cartbtn{position:relative;border:1px solid var(--ink);background:var(--ink);color:#F4EFE4;border-radius:8px;height:40px;padding:0 16px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
+  .cartbtn{position:relative;border:1px solid var(--ink);background:var(--ink);color:#EAEDE2;border-radius:8px;height:40px;padding:0 16px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.03em}
   .cartbtn:hover{background:var(--ink-soft)}
   .cartbtn .cnt{background:var(--gold);color:var(--ink);font-size:11px;font-weight:700;min-width:19px;height:19px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}
   .menu{display:none;background:none;border:1px solid var(--line);border-radius:8px;width:40px;height:40px;font-size:18px}
 
   /* hero */
-  .hero{position:relative;background:var(--ink);color:#F4EFE4;overflow:hidden;border-bottom:1px solid #2a2619}
+  .hero{position:relative;background:var(--ink);color:#EAEDE2;overflow:hidden;border-bottom:1px solid #28332B}
   .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.55}
-  .hero .hgrad{position:absolute;inset:0;background:radial-gradient(120% 90% at 78% 18%,rgba(185,125,28,.20),transparent 55%),linear-gradient(180deg,rgba(25,23,15,.2),rgba(25,23,15,.75))}
+  .hero .hgrad{position:absolute;inset:0;background:radial-gradient(120% 90% at 78% 18%,rgba(206,138,34,.20),transparent 55%),linear-gradient(180deg,rgba(20,32,26,.2),rgba(20,32,26,.75))}
   .hero .inner{position:relative;z-index:2;padding:92px 0 84px;max-width:680px}
-  .hero .eyebrow{color:#E9B254}
+  .hero .eyebrow{color:#E2A23C}
   .hero h1{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(40px,6.4vw,72px);line-height:.98;letter-spacing:-.02em;margin:18px 0 18px}
-  .hero h1 em{font-style:normal;color:#E9B254}
-  .hero p.lede{font-size:17px;color:#D8CFBC;max-width:520px;margin-bottom:30px}
+  .hero h1 em{font-style:normal;color:#E2A23C}
+  .hero p.lede{font-size:17px;color:#C3C8B6;max-width:520px;margin-bottom:30px}
   .hbtns{display:flex;gap:12px;flex-wrap:wrap}
   .btn{display:inline-flex;align-items:center;gap:8px;height:52px;padding:0 26px;border-radius:9px;font-size:15px;font-weight:600;border:1px solid transparent;transition:transform .12s,opacity .12s}
   .btn:hover{transform:translateY(-1px)}
   .btn-gold{background:var(--gold);color:var(--ink)}
-  .btn-gold:hover{background:#cc8c25}
-  .btn-out{background:transparent;color:#F4EFE4;border-color:rgba(244,239,228,.35)}
-  .btn-out:hover{border-color:#F4EFE4}
-  .btn-ink{background:var(--ink);color:#F4EFE4}
-  .hspecs{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(244,239,228,.16)}
+  .btn-gold:hover{background:#D7982C}
+  .btn-out{background:transparent;color:#EAEDE2;border-color:rgba(234,237,226,.35)}
+  .btn-out:hover{border-color:#EAEDE2}
+  .btn-ink{background:var(--ink);color:#EAEDE2}
+  .hspecs{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(234,237,226,.16)}
   .hspec{flex:1;min-width:160px;padding:18px 0;font-family:'IBM Plex Mono',monospace}
-  .hspec .n{font-size:21px;font-weight:600;color:#F4EFE4}
-  .hspec .l{font-size:11px;color:#A89E8A;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
-  .hspec+.hspec{border-left:1px solid rgba(244,239,228,.14);padding-left:22px}
+  .hspec .n{font-size:21px;font-weight:600;color:#EAEDE2}
+  .hspec .l{font-size:11px;color:#8D9383;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+  .hspec+.hspec{border-left:1px solid rgba(234,237,226,.14);padding-left:22px}
 
   /* value strip */
   .values{border-bottom:1px solid var(--line)}
   .vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
   .val{padding:26px 22px 26px 0;display:flex;gap:13px;align-items:flex-start}
   .val+.val{border-left:1px solid var(--line);padding-left:24px}
-  .val .vi{font-size:21px;line-height:1}
+  .val .vi{color:var(--gold);line-height:0;flex:none}
+  .val .vi svg,.thumb .ic svg,.li .lic svg,.loaditem .lic svg,.bundle .br .stack svg{display:block}
   .val h4{font-size:14px;font-weight:600;margin-bottom:2px}
   .val p{font-size:12.5px;color:var(--muted);line-height:1.45}
 
@@ -126,27 +127,27 @@
   .loaditems{list-style:none;margin:0;padding:0}
   .loaditem{display:flex;align-items:center;gap:13px;padding:12px 0;border-top:1px solid var(--line)}
   .loaditem:first-child{border-top:none}
-  .loaditem .lic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+  .loaditem .lic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none}
   .loaditem .ln{flex:1}
   .loaditem .ln b{font-size:14px;font-weight:600}
   .loaditem .ln span{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-top:1px}
   .loaditem .lq{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);font-weight:500}
   .loaditem .lpr{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;min-width:64px;text-align:right}
-  .loadside{background:var(--ink);color:#F4EFE4;padding:26px 28px;display:flex;flex-direction:column;justify-content:center}
-  .loadside .eyebrow{color:#E9B254}
+  .loadside{background:var(--ink);color:#EAEDE2;padding:26px 28px;display:flex;flex-direction:column;justify-content:center}
+  .loadside .eyebrow{color:#E2A23C}
   .loadside .lt{font-family:'Archivo',sans-serif;font-weight:800;font-size:34px;margin:8px 0 2px}
-  .loadside .lmrp{font-size:14px;color:#A89E8A}
+  .loadside .lmrp{font-size:14px;color:#8D9383}
   .loadside .lmrp s{margin-right:8px}
-  .loadside .lsave{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E9B254;margin:6px 0 20px}
+  .loadside .lsave{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E2A23C;margin:6px 0 20px}
   .loadside .btn{width:100%;justify-content:center}
 
   /* product card */
   .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
-  .card:hover{transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(25,23,15,.4)}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(20,32,26,.4)}
   .thumb{height:180px;position:relative;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
-  .thumb .ic{font-size:62px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.16))}
+  .thumb .ic{color:var(--ink);opacity:.9}
   .thumb .code{position:absolute;top:13px;left:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.1em;color:var(--ink);background:rgba(255,255,255,.7);padding:3px 8px;border-radius:5px}
-  .thumb .badge{position:absolute;top:13px;right:14px;background:var(--clay);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:5px;letter-spacing:.05em}
+  .thumb .badge{position:absolute;top:13px;right:14px;background:var(--gold);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.05em}
   .cbody{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
   .cbody h3{font-family:'Archivo',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.01em}
   .cbody .tagline{font-size:12.5px;color:var(--muted);margin:4px 0 12px}
@@ -156,33 +157,33 @@
   .modes{display:flex;gap:7px;margin-bottom:13px}
   .mode{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);line-height:1.25;transition:all .12s}
   .mode small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}
-  .mode.on{border-color:var(--ink);background:var(--ink);color:#F4EFE4}
-  .mode.on small{color:#D8CFBC}
+  .mode.on{border-color:var(--ink);background:var(--ink);color:#EAEDE2}
+  .mode.on small{color:#C3C8B6}
   .priceline{display:flex;align-items:baseline;gap:10px;margin-bottom:15px}
   .priceline .now{font-family:'Archivo',sans-serif;font-size:25px;font-weight:800}
   .priceline .mrp{font-size:14px;color:var(--muted);text-decoration:line-through}
   .priceline .off{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--green);background:#E2F0E7;padding:3px 8px;border-radius:5px}
-  .add{background:var(--ink);color:#F4EFE4;border:none;border-radius:10px;height:46px;font-size:14px;font-weight:600;width:100%;transition:opacity .12s,background .12s}
+  .add{background:var(--ink);color:#EAEDE2;border:none;border-radius:10px;height:46px;font-size:14px;font-weight:600;width:100%;transition:opacity .12s,background .12s}
   .add:hover{background:var(--ink-soft)}
   .add.sub{background:var(--gold);color:var(--ink)}
-  .add.sub:hover{background:#cc8c25}
+  .add.sub:hover{background:#D7982C}
 
   /* expedition bundle band */
-  .bundle{background:var(--ink);color:#F4EFE4;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;gap:0}
+  .bundle{background:var(--ink);color:#EAEDE2;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;gap:0}
   .bundle .bl{padding:46px 44px}
-  .bundle .eyebrow{color:#E9B254}
+  .bundle .eyebrow{color:#E2A23C}
   .bundle h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(26px,3vw,38px);letter-spacing:-.015em;margin:12px 0 14px;line-height:1.03}
-  .bundle p{font-size:14.5px;color:#D8CFBC;max-width:420px;margin-bottom:20px}
+  .bundle p{font-size:14.5px;color:#C3C8B6;max-width:420px;margin-bottom:20px}
   .bincl{list-style:none;margin:0 0 26px;padding:0;display:flex;flex-direction:column;gap:9px}
   .bincl li{font-size:14px;display:flex;align-items:center;gap:10px}
-  .bincl li .d{width:8px;height:8px;border-radius:50%;flex:none}
+  .bincl li .d{width:7px;height:7px;border-radius:50%;flex:none;background:var(--gold)}
   .bprice{display:flex;align-items:baseline;gap:12px;margin-bottom:22px}
   .bprice .now{font-family:'Archivo',sans-serif;font-size:38px;font-weight:800;color:#fff}
-  .bprice .mrp{font-size:17px;color:#A89E8A;text-decoration:line-through}
-  .bprice .off{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E9B254;border:1px solid rgba(233,178,84,.5);padding:3px 9px;border-radius:5px}
-  .bundle .br{position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#241f15,#15130c)}
-  .bundle .br .stack{font-size:96px;line-height:1;text-align:center;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
-  .bundle .br .ribbon{position:absolute;top:20px;right:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#E9B254;border:1px solid rgba(233,178,84,.4);padding:4px 10px;border-radius:20px;letter-spacing:.05em}
+  .bprice .mrp{font-size:17px;color:#8D9383;text-decoration:line-through}
+  .bprice .off{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E2A23C;border:1px solid rgba(226,162,60,.5);padding:3px 9px;border-radius:5px}
+  .bundle .br{position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1E2C24,#121A15)}
+  .bundle .br .stack{color:var(--gold);line-height:0;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
+  .bundle .br .ribbon{position:absolute;top:20px;right:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#E2A23C;border:1px solid rgba(226,162,60,.4);padding:4px 10px;border-radius:20px;letter-spacing:.05em}
 
   /* steps */
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
@@ -192,13 +193,13 @@
   .step p{font-size:13.5px;color:var(--muted)}
 
   /* story */
-  .story{background:var(--ink);color:#F4EFE4}
+  .story{background:var(--ink);color:#EAEDE2}
   .story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;padding:72px 24px}
-  .story .eyebrow{color:#E9B254}
+  .story .eyebrow{color:#E2A23C}
   .story h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(26px,3.2vw,38px);letter-spacing:-.015em;margin:12px 0 16px;line-height:1.05}
-  .story p{font-size:15px;color:#D8CFBC;margin-bottom:14px}
-  .story .sig{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#A89E8A;margin-top:8px}
-  .story .pull{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.2;color:#F4EFE4;border-left:3px solid var(--gold);padding-left:22px}
+  .story p{font-size:15px;color:#C3C8B6;margin-bottom:14px}
+  .story .sig{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#8D9383;margin-top:8px}
+  .story .pull{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.2;color:#EAEDE2;border-left:3px solid var(--gold);padding-left:22px}
 
   /* faq */
   .faq{max-width:760px}
@@ -210,29 +211,29 @@
   details p{font-size:14px;color:var(--muted);margin-top:12px;max-width:640px}
 
   /* waitlist */
-  .waitlist{background:var(--gold-soft);border:1px solid #E6D2A6;border-radius:18px;padding:46px 44px;text-align:center}
+  .waitlist{background:var(--gold-soft);border:1px solid #DBCBA0;border-radius:18px;padding:46px 44px;text-align:center}
   .waitlist h2{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(24px,3vw,34px);letter-spacing:-.015em}
   .waitlist p{font-size:14.5px;color:var(--ink-soft);max-width:440px;margin:10px auto 22px}
   .wform{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap}
   .wform input{flex:1;min-width:200px;height:50px;border:1px solid var(--gold);border-radius:10px;padding:0 16px;font-family:inherit;font-size:15px;background:var(--surface);color:var(--ink)}
-  .wform input:focus{outline:none;box-shadow:0 0 0 3px rgba(185,125,28,.2)}
+  .wform input:focus{outline:none;box-shadow:0 0 0 3px rgba(206,138,34,.2)}
   .wmsg{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--green);margin-top:14px;min-height:18px}
 
   /* footer */
-  footer{background:var(--ink);color:#C9C0AE;padding:60px 0 28px;font-size:13.5px}
-  .fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px;border-bottom:1px solid #2c2719}
-  .fbrand .mark{font-family:'Archivo',sans-serif;font-weight:900;font-size:24px;letter-spacing:.16em;color:#F4EFE4}
-  .fbrand .by{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8d846f;margin-top:8px;letter-spacing:.08em}
-  .fbrand p{color:#8d846f;font-size:13px;margin-top:14px;max-width:280px;line-height:1.55}
-  footer h5{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8d846f;margin-bottom:14px;font-weight:500}
+  footer{background:var(--ink);color:#BDC3B1;padding:60px 0 28px;font-size:13.5px}
+  .fgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px;border-bottom:1px solid #2A332C}
+  .fbrand .mark{font-family:'Archivo',sans-serif;font-weight:900;font-size:24px;letter-spacing:.16em;color:#EAEDE2}
+  .fbrand .by{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7C8474;margin-top:8px;letter-spacing:.08em}
+  .fbrand p{color:#7C8474;font-size:13px;margin-top:14px;max-width:280px;line-height:1.55}
+  footer h5{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#7C8474;margin-bottom:14px;font-weight:500}
   footer ul{list-style:none}
   footer li{margin-bottom:9px}
-  footer a:hover{color:#F4EFE4}
-  .fbot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:22px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#76705f}
+  footer a:hover{color:#EAEDE2}
+  .fbot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:22px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6B7264}
   .fbot a{text-decoration:underline;text-underline-offset:2px}
 
   /* cart drawer */
-  .scrim{position:fixed;inset:0;background:rgba(25,23,15,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+  .scrim{position:fixed;inset:0;background:rgba(20,32,26,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
   .scrim.on{opacity:1;pointer-events:auto}
   .drawer{position:fixed;top:0;right:0;height:100%;width:400px;max-width:92vw;background:var(--canvas);z-index:50;transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-16px 0 50px -20px rgba(0,0,0,.4)}
   .drawer.on{transform:none}
@@ -242,7 +243,7 @@
   .ditems{flex:1;overflow-y:auto;padding:6px 22px}
   .empty{padding:54px 10px;text-align:center;color:var(--muted);font-size:14px}
   .li{display:flex;gap:13px;padding:15px 0;border-bottom:1px solid var(--line)}
-  .li .lic{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:25px;flex:none}
+  .li .lic{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ink);flex:none}
   .li .info{flex:1;min-width:0}
   .li .nm{font-size:14px;font-weight:600}
   .li .tg{font-size:11px;color:var(--muted);margin-top:1px;font-family:'IBM Plex Mono',monospace}
@@ -260,12 +261,12 @@
   .sumrow.save{color:var(--green);font-weight:600}
   .sumrow.tot{font-family:'Archivo',sans-serif;font-size:19px;font-weight:800;margin:11px 0 15px}
   .checkout{background:var(--gold);color:var(--ink);border:none;border-radius:11px;height:52px;width:100%;font-size:15px;font-weight:700}
-  .checkout:hover{background:#cc8c25}
+  .checkout:hover{background:#D7982C}
 
   /* modal */
   .modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
   .modal.on{display:flex}
-  .modal .mscrim{position:absolute;inset:0;background:rgba(25,23,15,.55)}
+  .modal .mscrim{position:absolute;inset:0;background:rgba(20,32,26,.55)}
   .mcard{position:relative;background:var(--surface);border-radius:16px;width:100%;max-width:470px;max-height:92vh;overflow-y:auto;padding:28px}
   .mcard h3{font-family:'Archivo',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px}
   .mcard .msub{font-size:13px;color:var(--muted);margin-bottom:20px}
@@ -275,7 +276,7 @@
   .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold)}
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .err{color:var(--clay);font-size:12px;margin:2px 0 8px;display:none}
-  .place{background:var(--ink);color:#F4EFE4;border:none;border-radius:11px;height:52px;width:100%;font-size:15px;font-weight:600;margin-top:6px}
+  .place{background:var(--ink);color:#EAEDE2;border:none;border-radius:11px;height:52px;width:100%;font-size:15px;font-weight:600;margin-top:6px}
   .confirm-ic{font-size:50px;text-align:center;margin-bottom:10px}
 
   /* master zone */
@@ -293,7 +294,7 @@
   .otable{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .oscroll{overflow-x:auto}
   table{width:100%;border-collapse:collapse;font-size:13px;min-width:780px}
-  th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:13px 15px;border-bottom:1px solid var(--line);background:#F7F2E8}
+  th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:13px 15px;border-bottom:1px solid var(--line);background:#EEF1E6}
   td{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top}
   .ostatus{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;cursor:pointer;border:none}
   .ostatus.new{background:var(--gold-soft);color:var(--gold-deep)}
@@ -320,7 +321,7 @@
 </head>
 <body class="clip">
 
-<div class="announce" id="storeview">LAUNCH WEEK · <b>Flat 50% off</b> every kit · Free shipping over &#8377;999 · introductory pricing, ends soon</div>
+<div class="announce" id="storeview">Launch week. <b>Flat 50% off</b> every kit, plus free shipping over &#8377;999. Introductory pricing, ends soon.</div>
 
 <header id="storehead">
   <div class="wrap hrow">
@@ -349,7 +350,7 @@
     <div class="wrap inner">
       <div class="eyebrow">Expedition kits for long-distance riders</div>
       <h1>Ride ready.<br>Carry <em>less doubt.</em></h1>
-      <p class="lede">Curated repair, recovery and hydration kits for Himalayan-grade rides. Buy once, or subscribe and we refill before every season, so you never reach 4,000m missing the one thing that matters.</p>
+      <p class="lede">Curated repair, recovery and hydration kits for Himalayan-grade rides. Buy once, or subscribe and we refill before every season.</p>
       <div class="hbtns">
         <a href="#kits" class="btn btn-gold">Shop the kits</a>
         <a href="#refills" class="btn btn-out">How refills work</a>
@@ -365,16 +366,16 @@
 
   <!-- VALUES -->
   <section class="values"><div class="wrap vgrid">
-    <div class="val"><div class="vi">&#129683;</div><div><h4>Curated, not random</h4><p>Every item earns its place. No padding, no 72-piece filler boxes.</p></div></div>
-    <div class="val"><div class="vi">&#128259;</div><div><h4>Refill subscriptions</h4><p>Subscribe and the consumables top up automatically. Skip anytime.</p></div></div>
-    <div class="val"><div class="vi">&#128666;</div><div><h4>Ships across India</h4><p>Dispatched in 2 to 4 working days. COD and prepaid both supported.</p></div></div>
-    <div class="val"><div class="vi">&#128737;&#65039;</div><div><h4>Built to fit the bike</h4><p>Universal mounts strap to tank, bars or tail. Nothing rattles loose.</p></div></div>
+    <div class="val"><div class="vi"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg></div><div><h4>Curated, not random</h4><p>Every item earns its place. No padding, no 72-piece filler boxes.</p></div></div>
+    <div class="val"><div class="vi"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 16"/><path d="M4 20v-4h4"/></svg></div><div><h4>Refill subscriptions</h4><p>Subscribe and the consumables top up automatically. Skip anytime.</p></div></div>
+    <div class="val"><div class="vi"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v9H3z"/><path d="M14 9h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></div><div><h4>Ships across India</h4><p>Dispatched in 2 to 4 working days. COD and prepaid both supported.</p></div></div>
+    <div class="val"><div class="vi"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div><h4>Built to fit the bike</h4><p>Universal mounts strap to tank, bars or tail. Nothing rattles loose.</p></div></div>
   </div></section>
 
   <!-- TRIP PLANNER -->
   <section class="block wrap" id="plan">
     <div class="shead">
-      <div><div class="eyebrow">Plan by trip length</div><h2>How long are you riding?</h2></div>
+      <div><h2>How long are you riding?</h2></div>
       <div class="sdesc">Pick a duration and we build the loadout: durable gear once, consumables scaled to the days. Add it in one tap, then tweak anything in the cart.</div>
     </div>
     <div class="planner">
@@ -391,7 +392,7 @@
   <!-- KITS -->
   <section class="block wrap" id="kits">
     <div class="shead">
-      <div><div class="eyebrow">01 / The kits</div><h2>Three kits. Every long ride covered.</h2></div>
+      <div><h2>Three kits. Every long ride covered.</h2></div>
       <div class="sdesc">Buy a kit standalone, or pick Subscribe &amp; Refill to auto-replenish the consumables at a lower per-refill price.</div>
     </div>
     <div class="grid" id="kitgrid"></div>
@@ -405,21 +406,21 @@
         <h2>The SOUL Expedition</h2>
         <p>Our complete starter: the FIX repair kit, the HYDRATION kit and the universal Sling bag to carry it all. Set it once, and the consumables auto-refill before every season.</p>
         <ul class="bincl">
-          <li><span class="d" style="background:var(--fix)"></span>SOUL FIX repair kit</li>
-          <li><span class="d" style="background:var(--hydration)"></span>SOUL HYDRATION kit</li>
-          <li><span class="d" style="background:var(--bag)"></span>SOUL Sling universal bag</li>
+          <li><span class="d"></span>SOUL FIX repair kit</li>
+          <li><span class="d"></span>SOUL HYDRATION kit</li>
+          <li><span class="d"></span>SOUL Sling universal bag</li>
         </ul>
         <div class="bprice"><span class="now" id="bun-now"></span><span class="mrp" id="bun-mrp"></span><span class="off" id="bun-off"></span></div>
         <button class="btn btn-gold" onclick="addToCart('expedition')">Add the Expedition</button>
       </div>
-      <div class="br"><div class="ribbon">Best value</div><div class="stack">&#127956;</div></div>
+      <div class="br"><div class="ribbon">Best value</div><div class="stack"><svg viewBox="0 0 24 24" width="104" height="104" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19h18L14.5 7l-3.2 5.2L9 9z"/><circle cx="17.5" cy="6" r="1.4"/></svg></div></div>
     </div>
   </section>
 
   <!-- BAGS -->
   <section class="block wrap" id="bags" style="padding-top:0">
     <div class="shead">
-      <div><div class="eyebrow">02 / Carry</div><h2>Bike bags that fit anywhere</h2></div>
+      <div><h2>Bike bags that fit anywhere</h2></div>
       <div class="sdesc">Universal straps mount to tank, handlebar or tail. Pair with a refill plan and never run dry mid-route.</div>
     </div>
     <div class="grid two" id="baggrid"></div>
@@ -428,7 +429,7 @@
   <!-- REFILLS -->
   <section class="block wrap" id="refills">
     <div class="shead">
-      <div><div class="eyebrow">How it works</div><h2>Refills, on autopilot</h2></div>
+      <div><h2>Refills, on autopilot</h2></div>
       <div class="sdesc">The durable gear you keep. Only what you use comes back, on a schedule you control.</div>
     </div>
     <div class="steps">
@@ -454,7 +455,7 @@
 
   <!-- FAQ -->
   <section class="block wrap" id="faq">
-    <div class="shead"><div><div class="eyebrow">Good to know</div><h2>Questions, answered</h2></div></div>
+    <div class="shead"><div><h2>Questions, answered</h2></div></div>
     <div class="faq">
       <details><summary>What is actually inside a kit?</summary><p>Each product page lists every item. Kits hold rider-tested essentials only, no filler. The durable tools are yours to keep; the consumables are what a refill replaces.</p></details>
       <details><summary>How do refills and subscriptions work?</summary><p>Choose Subscribe &amp; Refill on any kit or bag. We ship a fresh top-up of the consumables every 3 months at a lower per-refill price. Skip a cycle or cancel anytime.</p></details>
@@ -468,7 +469,6 @@
   <!-- WAITLIST -->
   <section class="block wrap" id="waitlist" style="padding-top:0">
     <div class="waitlist">
-      <div class="eyebrow" style="color:var(--gold-deep)">Launch access</div>
       <h2>Be first on the road</h2>
       <p>Join the list for launch-day access, restock alerts and rider-only pricing. No spam, just the gear.</p>
       <div class="wform">
@@ -527,7 +527,7 @@
       </ul></div>
     </div>
     <div class="fbot">
-      <div>&copy; 2026 Apex Essential Pvt Ltd &middot; GSTIN: applied for &middot; FSSAI: applied for</div>
+      <div>&copy; 2026 Apex Essential Pvt Ltd. GSTIN and FSSAI: applied for.</div>
       <div>SOUL by AEPL &middot; <a href="#" onclick="showMaster();return false">Master zone</a></div>
     </div>
   </div>
@@ -576,27 +576,36 @@
 
 <script>
 // ponytail: "mrp" is the pre-launch anchor price you set per product. Keeping it equal to an honest pre-launch price is legal; inflating it past a real prior selling price is a CCPA dark pattern.
-const KC={fix:'#C2562E',revive:'#2E8B63',hydration:'#2B7AB8',bag:'#7A5B36',bundle:'#B97D1C'};
+const KC={fix:'#2C4A3E',revive:'#2C4A3E',hydration:'#2C4A3E',bag:'#2C4A3E',bundle:'#2C4A3E'};
+const ICONS={
+  fix:'<path d="M21 4a5 5 0 0 1-6.5 6.5L6 19a2 2 0 0 1-3-3l8.5-8.5A5 5 0 0 1 18 1l-3 3 2 2z"/>',
+  revive:'<path d="M9 9h6v10a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/><path d="M9 9V6h3V4"/><path d="M15 6h2M15 9h2"/>',
+  hydration:'<path d="M12 3.5s6 6 6 10.5a6 6 0 0 1-12 0c0-4.5 6-10.5 6-10.5z"/>',
+  sling:'<path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+  pod:'<rect x="5" y="7" width="14" height="13" rx="2"/><path d="M5 11h14M10 7V5h4v2"/>',
+  expedition:'<path d="M3 19h18L14.5 7l-3.2 5.2L9 9z"/><circle cx="17.5" cy="6" r="1.4"/>'
+};
+function icn(id,sz){return `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]||''}</svg>`}
 const TINT=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 const rs=n=>'₹'+n.toLocaleString('en-IN');
 
 const PRODUCTS=[
-  {id:'fix',cat:'kit',code:'SOUL-FIX-01',color:'fix',icon:'🛠️',name:'SOUL FIX',tagline:'Roadside repair, sorted.',
+  {id:'fix',cat:'kit',code:'SOUL-FIX-01',color:'fix',name:'SOUL FIX',tagline:'Roadside repair, sorted.',
     items:['Tubeless puncture plug kit','Folding multi-tool','M-Seal &amp; quick glue','Heavy-duty duct tape','Zip ties (x10)'],
     once:{price:1499,mrp:2999},sub:{price:999,mrp:1999}},
-  {id:'revive',cat:'kit',code:'SOUL-REVIVE-01',color:'revive',icon:'🧴',name:'SOUL REVIVE',tagline:'Reset after the long day.',
+  {id:'revive',cat:'kit',code:'SOUL-REVIVE-01',color:'revive',name:'SOUL REVIVE',tagline:'Reset after the long day.',
     items:['Anti-chafing cream','Cooling body wipes','Pocket sanitizer','Dry shampoo sachets','SPF lip balm'],
     once:{price:799,mrp:1599},sub:{price:599,mrp:1199}},
-  {id:'hydration',cat:'kit',code:'SOUL-HYD-01',color:'hydration',icon:'💧',name:'SOUL HYDRATION',tagline:'Keep moving at altitude.',
+  {id:'hydration',cat:'kit',code:'SOUL-HYD-01',color:'hydration',name:'SOUL HYDRATION',tagline:'Keep moving at altitude.',
     items:['Electrolyte sachets (x6)','Energy bars (x4)','Trail mix pack','Re-usable flask sticker'],
     once:{price:699,mrp:1399},sub:{price:499,mrp:999}},
-  {id:'sling',cat:'bag',code:'SOUL-BAG-SLING',color:'bag',icon:'🎒',name:'SOUL Sling',tagline:'Universal. Straps anywhere.',
+  {id:'sling',cat:'bag',code:'SOUL-BAG-SLING',color:'bag',name:'SOUL Sling',tagline:'Universal. Straps anywhere.',
     items:['Fits tank, bar or tail','Holds any one SOUL kit','Weatherproof shell','Quick-release straps'],
     once:{price:1299,mrp:2599},sub:{price:899,mrp:1799}},
-  {id:'pod',cat:'bag',code:'SOUL-BAG-POD',color:'bag',icon:'👝',name:'SOUL Pod',tagline:'Compact frame pouch.',
+  {id:'pod',cat:'bag',code:'SOUL-BAG-POD',color:'bag',name:'SOUL Pod',tagline:'Compact frame pouch.',
     items:['Frame-mount, fits any tube','For tools or recovery','Water-resistant zip','Reflective trim'],
     once:{price:799,mrp:1599},sub:{price:599,mrp:1199}},
-  {id:'expedition',cat:'bundle',code:'SOUL-EXP-KIT',color:'bundle',icon:'🏔️',name:'The SOUL Expedition',tagline:'FIX + HYDRATION + Sling bag.',
+  {id:'expedition',cat:'bundle',code:'SOUL-EXP-KIT',color:'bundle',name:'The SOUL Expedition',tagline:'FIX + HYDRATION + Sling bag.',
     items:['SOUL FIX repair kit','SOUL HYDRATION kit','SOUL Sling universal bag'],
     once:{price:2999,mrp:4997},sub:{price:2299,mrp:3997}}
 ];
@@ -627,7 +636,7 @@ function drawTopo(){
       px===0?x.moveTo(px,y):x.lineTo(px,y);
     }
     const a=0.06+0.10*Math.sin(i*0.6);
-    x.strokeStyle=`rgba(185,125,28,${Math.max(0.04,a)})`;
+    x.strokeStyle=`rgba(206,138,34,${Math.max(0.04,a)})`;
     x.stroke();
   }
 }
@@ -638,7 +647,7 @@ function cardHTML(p){
   return `<div class="card" data-id="${p.id}" style="--kc:${KC[p.color]}">
     <div class="thumb" style="background:${TINT(KC[p.color],.12)}">
       <span class="code">${p.code}</span><span class="badge">50% OFF</span>
-      <span class="ic">${p.icon}</span>
+      <span class="ic">${icn(p.id,46)}</span>
     </div>
     <div class="cbody">
       <h3>${p.name}</h3>
@@ -694,10 +703,10 @@ function renderCart(){
   items.innerHTML=cart.map((l,i)=>{
     const p=P(l.id),o=p[l.mode];
     return `<div class="li">
-      <div class="lic" style="background:${TINT(KC[p.color],.16)}">${p.icon}</div>
+      <div class="lic" style="background:${TINT(KC[p.color],.16)}">${icn(p.id,24)}</div>
       <div class="info">
         <div class="nm">${p.name}</div>
-        <div class="tg ${l.mode==='sub'?'subscribe':''}">${l.mode==='sub'?'SUBSCRIBE · refill / 3 mo':'ONE-TIME'} · ${rs(o.price)}</div>
+        <div class="tg ${l.mode==='sub'?'subscribe':''}">${l.mode==='sub'?'Refill every 3 mo':'One-time'} · ${rs(o.price)}</div>
         <div class="row2">
           <div class="qty"><button onclick="changeQty(${i},-1)">−</button><span>${l.qty}</span><button onclick="changeQty(${i},1)">+</button></div>
           <div class="lp">${rs(o.price*l.qty)}</div>
@@ -773,7 +782,7 @@ function renderMaster(){
       <td><b>${o.customer.name}</b><br><span style="color:var(--muted);font-size:12px">${o.customer.phone}<br>${o.customer.city||''} ${o.customer.pin||''}</span></td>
       <td style="font-size:12px">${items}</td>
       <td class="mono">${rs(o.total)}</td>
-      <td>${o.hasSub?'🔁 Sub':'One-time'}</td>
+      <td>${o.hasSub?'Refill':'One-time'}</td>
       <td><button class="ostatus ${o.status}" onclick="toggleStatus(${i})">${o.status}</button></td>
       <td><button class="odel" onclick="delOrder(${i})">✕</button></td>
     </tr>`;
@@ -834,7 +843,7 @@ function syncTrip(animate){
   const lines=t.items.map(([id,q],idx)=>{
     const p=P(id);
     return `<li class="loaditem" style="animation-delay:${idx*55}ms">
-      <div class="lic" style="background:${TINT(KC[p.color],.16)}">${p.icon}</div>
+      <div class="lic" style="background:${TINT(KC[p.color],.16)}">${icn(p.id,24)}</div>
       <div class="ln"><b>${p.name}</b><span>${p.code}</span></div>
       <div class="lq">x ${q}</div>
       <div class="lpr">${rs(p.once.price*q)}</div>

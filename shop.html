@@ -96,14 +96,30 @@
   .grid.two{grid-template-columns:repeat(2,1fr)}
 
   /* trip planner */
-  .tripchips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-  .tripchip{border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:13px 20px;text-align:center;cursor:pointer;transition:all .14s;min-width:92px}
-  .tripchip .d{font-family:'Archivo',sans-serif;font-weight:800;font-size:19px;line-height:1}
-  .tripchip .u{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
-  .tripchip:hover{border-color:var(--gold)}
-  .tripchip.on{background:var(--ink);border-color:var(--ink)}
-  .tripchip.on .d{color:#F4EFE4}
-  .tripchip.on .u{color:#D8CFBC}
+  .planner{margin-bottom:28px;max-width:700px}
+  .planhead{display:flex;align-items:baseline;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+  .planday{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(40px,6vw,56px);line-height:.9;display:flex;align-items:baseline;gap:9px}
+  .planday i{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.04em}
+  .planhint{font-family:'IBM Plex Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-deep)}
+  #tripslider{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--gold) 0 var(--fill,40%),var(--line) var(--fill,40%) 100%);outline:none;cursor:pointer}
+  #tripslider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:var(--ink);border:3px solid var(--gold-soft);box-shadow:0 3px 8px rgba(0,0,0,.3);transition:transform .12s}
+  #tripslider:active::-webkit-slider-thumb{transform:scale(1.18)}
+  #tripslider:focus-visible{box-shadow:0 0 0 3px var(--gold-soft)}
+  #tripslider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--ink);border:3px solid var(--gold-soft);cursor:pointer}
+  #tripslider::-moz-range-progress{background:var(--gold);height:8px;border-radius:8px}
+  #tripslider::-moz-range-track{background:var(--line);height:8px;border-radius:8px}
+  .ticks{display:flex;justify-content:space-between;margin-top:13px}
+  .tick{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);cursor:pointer;flex:1;text-align:center;transition:color .12s}
+  .tick:first-child{text-align:left}.tick:last-child{text-align:right}
+  .tick.on{color:var(--gold-deep);font-weight:600}
+  .tick:hover{color:var(--ink)}
+  @keyframes loadIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .loaditem{animation:loadIn .42s cubic-bezier(.4,0,.2,1) both}
+  @keyframes popk{0%{transform:scale(1)}42%{transform:scale(1.45)}100%{transform:scale(1)}}
+  .cnt.pop{animation:popk .32s ease}
+  body.anim .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}
+  body.anim .reveal.inview{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.loaditem{animation:none}.cnt.pop{animation:none}}
   .loadout{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1.6fr 1fr}
   .loadout .ll{padding:26px 28px}
   .loadout .lwhy{font-size:14px;color:var(--muted);margin-bottom:18px;max-width:440px}
@@ -361,7 +377,14 @@
       <div><div class="eyebrow">Plan by trip length</div><h2>How long are you riding?</h2></div>
       <div class="sdesc">Pick a duration and we build the loadout: durable gear once, consumables scaled to the days. Add it in one tap, then tweak anything in the cart.</div>
     </div>
-    <div class="tripchips" id="tripchips"></div>
+    <div class="planner">
+      <div class="planhead">
+        <div class="planday"><span id="bigdays">3</span><i>day trip</i></div>
+        <div class="planhint" id="planhint"></div>
+      </div>
+      <input type="range" id="tripslider" min="0" max="5" step="1" value="2" aria-label="Trip length preset">
+      <div class="ticks" id="ticks"></div>
+    </div>
     <div class="loadout" id="loadout"></div>
   </section>
 
@@ -654,7 +677,7 @@ function addToCart(id){
   const m=mode[id]||'once';
   const line=cart.find(l=>l.id===id&&l.mode===m);
   if(line)line.qty++;else cart.push({id,mode:m,qty:1});
-  saveCart();renderCart();openCart();
+  saveCart();renderCart();popCart();openCart();
 }
 function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);saveCart();renderCart();}
 function removeLine(i){cart.splice(i,1);saveCart();renderCart();}
@@ -784,22 +807,33 @@ const TRIPS=[
   {days:14,label:'2 weeks',unit:'two weeks',why:'More consumables and a second recovery pack for a fortnight out.',items:[['fix',1],['hydration',3],['revive',2],['sling',1]]},
   {days:30,label:'1 month',unit:'one month',why:'Expedition load: extra hydration, recovery, and a frame pouch for the overflow.',items:[['fix',1],['hydration',5],['revive',3],['sling',1],['pod',1]]}
 ];
-let curTrip=2; // default: 3 day
-function renderTripChips(){
-  document.getElementById('tripchips').innerHTML=TRIPS.map((t,i)=>
-    `<div class="tripchip ${i===curTrip?'on':''}" onclick="selectTrip(${i})"><div class="d">${t.days}<span style="font-size:12px;font-weight:600"> d</span></div><div class="u">${t.unit}</div></div>`).join('');
-}
-function selectTrip(i){curTrip=i;renderTripChips();renderLoadout();}
+const animOK=!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+let curTrip=2,lastTotal=0; // default: 3 day
 function loadoutTotals(t){
   let now=0,mrp=0;
   t.items.forEach(([id,q])=>{const o=P(id).once;now+=o.price*q;mrp+=o.mrp*q;});
   return {now,mrp,save:mrp-now};
 }
-function renderLoadout(){
+function renderTicks(){
+  document.getElementById('ticks').innerHTML=TRIPS.map((t,i)=>`<div class="tick" onclick="pickTrip(${i})">${t.days}d</div>`).join('');
+}
+function countUp(el,from,to,fmt,dur){
+  if(!el)return;
+  if(!animOK||from===to){el.textContent=fmt(to);return}
+  const t0=performance.now();
+  requestAnimationFrame(function step(t){const k=Math.min(1,(t-t0)/dur);const v=from+(to-from)*(1-Math.pow(1-k,3));el.textContent=fmt(Math.round(v));if(k<1)requestAnimationFrame(step)});
+}
+function pickTrip(i){curTrip=i;document.getElementById('tripslider').value=i;syncTrip(true);}
+function syncTrip(animate){
   const t=TRIPS[curTrip],tot=loadoutTotals(t);
-  const lines=t.items.map(([id,q])=>{
+  document.getElementById('tripslider').style.setProperty('--fill',(curTrip/(TRIPS.length-1)*100)+'%');
+  document.querySelectorAll('.tick').forEach((el,i)=>el.classList.toggle('on',i===curTrip));
+  const bd=document.getElementById('bigdays');
+  countUp(bd,animate?(parseInt(bd.textContent,10)||t.days):t.days,t.days,v=>v,420);
+  document.getElementById('planhint').textContent=t.unit;
+  const lines=t.items.map(([id,q],idx)=>{
     const p=P(id);
-    return `<li class="loaditem">
+    return `<li class="loaditem" style="animation-delay:${idx*55}ms">
       <div class="lic" style="background:${TINT(KC[p.color],.16)}">${p.icon}</div>
       <div class="ln"><b>${p.name}</b><span>${p.code}</span></div>
       <div class="lq">x ${q}</div>
@@ -812,11 +846,13 @@ function renderLoadout(){
     </div>
     <div class="loadside">
       <div class="eyebrow">${t.label} loadout</div>
-      <div class="lt">${rs(tot.now)}</div>
+      <div class="lt" id="loadtot">${rs(tot.now)}</div>
       <div class="lmrp"><s>${rs(tot.mrp)}</s>launch price</div>
       <div class="lsave">You save ${rs(tot.save)} this trip</div>
       <button class="btn btn-gold" onclick="addLoadout()">Add loadout to cart</button>
     </div>`;
+  countUp(document.getElementById('loadtot'),animate?lastTotal:tot.now,tot.now,rs,480);
+  lastTotal=tot.now;
 }
 function addLoadout(){
   const t=TRIPS[curTrip];
@@ -824,10 +860,20 @@ function addLoadout(){
     const line=cart.find(l=>l.id===id&&l.mode==='once');
     if(line)line.qty+=q;else cart.push({id,mode:'once',qty:q});
   });
-  saveCart();renderCart();openCart();
+  saveCart();renderCart();popCart();openCart();
 }
+function popCart(){if(!animOK)return;const c=document.getElementById('cartcnt');c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');}
 
-renderProducts();renderCart();drawTopo();renderTripChips();renderLoadout();
+document.getElementById('tripslider').addEventListener('input',e=>{curTrip=+e.target.value;syncTrip(true);});
+
+renderProducts();renderCart();drawTopo();renderTicks();syncTrip(false);
+
+// scroll reveal
+if(animOK){
+  document.body.classList.add('anim');
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('inview');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.shead,.val,.card,.step,.bundle,.loadout,.waitlist,.story .pull,.faq details').forEach(el=>{el.classList.add('reveal');io.observe(el)});
+}
 window.addEventListener('resize',drawTopo);
 if(location.hash==='#master')showMaster();
 </script>

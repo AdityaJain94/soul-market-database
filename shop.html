@@ -95,6 +95,35 @@
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
   .grid.two{grid-template-columns:repeat(2,1fr)}
 
+  /* trip planner */
+  .tripchips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+  .tripchip{border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:13px 20px;text-align:center;cursor:pointer;transition:all .14s;min-width:92px}
+  .tripchip .d{font-family:'Archivo',sans-serif;font-weight:800;font-size:19px;line-height:1}
+  .tripchip .u{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+  .tripchip:hover{border-color:var(--gold)}
+  .tripchip.on{background:var(--ink);border-color:var(--ink)}
+  .tripchip.on .d{color:#F4EFE4}
+  .tripchip.on .u{color:#D8CFBC}
+  .loadout{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1.6fr 1fr}
+  .loadout .ll{padding:26px 28px}
+  .loadout .lwhy{font-size:14px;color:var(--muted);margin-bottom:18px;max-width:440px}
+  .loaditems{list-style:none;margin:0;padding:0}
+  .loaditem{display:flex;align-items:center;gap:13px;padding:12px 0;border-top:1px solid var(--line)}
+  .loaditem:first-child{border-top:none}
+  .loaditem .lic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+  .loaditem .ln{flex:1}
+  .loaditem .ln b{font-size:14px;font-weight:600}
+  .loaditem .ln span{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-top:1px}
+  .loaditem .lq{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);font-weight:500}
+  .loaditem .lpr{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;min-width:64px;text-align:right}
+  .loadside{background:var(--ink);color:#F4EFE4;padding:26px 28px;display:flex;flex-direction:column;justify-content:center}
+  .loadside .eyebrow{color:#E9B254}
+  .loadside .lt{font-family:'Archivo',sans-serif;font-weight:800;font-size:34px;margin:8px 0 2px}
+  .loadside .lmrp{font-size:14px;color:#A89E8A}
+  .loadside .lmrp s{margin-right:8px}
+  .loadside .lsave{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E9B254;margin:6px 0 20px}
+  .loadside .btn{width:100%;justify-content:center}
+
   /* product card */
   .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
   .card:hover{transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(25,23,15,.4)}
@@ -261,6 +290,7 @@
     .vgrid{grid-template-columns:1fr 1fr}.val:nth-child(3){border-left:none;padding-left:0}
     .grid,.steps{grid-template-columns:1fr}.grid.two{grid-template-columns:1fr}
     .bundle{grid-template-columns:1fr}.bundle .br{min-height:200px}
+    .loadout{grid-template-columns:1fr}
     .story .wrap{grid-template-columns:1fr;gap:28px}
   }
   @media (max-width:680px){
@@ -280,6 +310,7 @@
   <div class="wrap hrow">
     <a href="#top" class="brand" onclick="showStore()"><span class="mark">SOUL</span><span class="by">by AEPL</span></a>
     <nav class="nav" id="nav">
+      <a href="#plan" onclick="closeMenu()">Plan a trip</a>
       <a href="#kits" onclick="closeMenu()">Kits</a>
       <a href="#bundle" onclick="closeMenu()">Expedition bundle</a>
       <a href="#bags" onclick="closeMenu()">Bags</a>
@@ -323,6 +354,16 @@
     <div class="val"><div class="vi">&#128666;</div><div><h4>Ships across India</h4><p>Dispatched in 2 to 4 working days. COD and prepaid both supported.</p></div></div>
     <div class="val"><div class="vi">&#128737;&#65039;</div><div><h4>Built to fit the bike</h4><p>Universal mounts strap to tank, bars or tail. Nothing rattles loose.</p></div></div>
   </div></section>
+
+  <!-- TRIP PLANNER -->
+  <section class="block wrap" id="plan">
+    <div class="shead">
+      <div><div class="eyebrow">Plan by trip length</div><h2>How long are you riding?</h2></div>
+      <div class="sdesc">Pick a duration and we build the loadout: durable gear once, consumables scaled to the days. Add it in one tap, then tweak anything in the cart.</div>
+    </div>
+    <div class="tripchips" id="tripchips"></div>
+    <div class="loadout" id="loadout"></div>
+  </section>
 
   <!-- KITS -->
   <section class="block wrap" id="kits">
@@ -733,7 +774,60 @@ function showStore(){document.getElementById('master').classList.remove('on');do
 function toggleMenu(){document.getElementById('nav').classList.toggle('open');}
 function closeMenu(){document.getElementById('nav').classList.remove('open');}
 
-renderProducts();renderCart();drawTopo();
+// ---- trip planner ----
+// durables stay at 1; consumables (hydration, revive) scale with days. why = one-line rationale.
+const TRIPS=[
+  {days:1,label:'1 day',unit:'day ride',why:'A quick run. Carry repair and a day of hydration, nothing more.',items:[['fix',1],['hydration',1]]},
+  {days:2,label:'2 day',unit:'weekend',why:'Add recovery for the second morning in the saddle.',items:[['fix',1],['hydration',1],['revive',1]]},
+  {days:3,label:'3 day',unit:'long weekend',why:'Full kit set plus a bag to mount it all on the bike.',items:[['fix',1],['hydration',1],['revive',1],['sling',1]]},
+  {days:7,label:'1 week',unit:'one week',why:'Double the hydration for a week of altitude and heat.',items:[['fix',1],['hydration',2],['revive',1],['sling',1]]},
+  {days:14,label:'2 weeks',unit:'two weeks',why:'More consumables and a second recovery pack for a fortnight out.',items:[['fix',1],['hydration',3],['revive',2],['sling',1]]},
+  {days:30,label:'1 month',unit:'one month',why:'Expedition load: extra hydration, recovery, and a frame pouch for the overflow.',items:[['fix',1],['hydration',5],['revive',3],['sling',1],['pod',1]]}
+];
+let curTrip=2; // default: 3 day
+function renderTripChips(){
+  document.getElementById('tripchips').innerHTML=TRIPS.map((t,i)=>
+    `<div class="tripchip ${i===curTrip?'on':''}" onclick="selectTrip(${i})"><div class="d">${t.days}<span style="font-size:12px;font-weight:600"> d</span></div><div class="u">${t.unit}</div></div>`).join('');
+}
+function selectTrip(i){curTrip=i;renderTripChips();renderLoadout();}
+function loadoutTotals(t){
+  let now=0,mrp=0;
+  t.items.forEach(([id,q])=>{const o=P(id).once;now+=o.price*q;mrp+=o.mrp*q;});
+  return {now,mrp,save:mrp-now};
+}
+function renderLoadout(){
+  const t=TRIPS[curTrip],tot=loadoutTotals(t);
+  const lines=t.items.map(([id,q])=>{
+    const p=P(id);
+    return `<li class="loaditem">
+      <div class="lic" style="background:${TINT(KC[p.color],.16)}">${p.icon}</div>
+      <div class="ln"><b>${p.name}</b><span>${p.code}</span></div>
+      <div class="lq">x ${q}</div>
+      <div class="lpr">${rs(p.once.price*q)}</div>
+    </li>`;}).join('');
+  document.getElementById('loadout').innerHTML=`
+    <div class="ll">
+      <div class="lwhy">${t.why}</div>
+      <ul class="loaditems">${lines}</ul>
+    </div>
+    <div class="loadside">
+      <div class="eyebrow">${t.label} loadout</div>
+      <div class="lt">${rs(tot.now)}</div>
+      <div class="lmrp"><s>${rs(tot.mrp)}</s>launch price</div>
+      <div class="lsave">You save ${rs(tot.save)} this trip</div>
+      <button class="btn btn-gold" onclick="addLoadout()">Add loadout to cart</button>
+    </div>`;
+}
+function addLoadout(){
+  const t=TRIPS[curTrip];
+  t.items.forEach(([id,q])=>{
+    const line=cart.find(l=>l.id===id&&l.mode==='once');
+    if(line)line.qty+=q;else cart.push({id,mode:'once',qty:q});
+  });
+  saveCart();renderCart();openCart();
+}
+
+renderProducts();renderCart();drawTopo();renderTripChips();renderLoadout();
 window.addEventListener('resize',drawTopo);
 if(location.hash==='#master')showMaster();
 </script>
